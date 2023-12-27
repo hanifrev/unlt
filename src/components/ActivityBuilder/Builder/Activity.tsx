@@ -1,9 +1,30 @@
 import { Generate, Star } from 'assets'
 import Dropdown from 'components/Dropdown'
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
+import { FaHistory } from 'react-icons/fa'
+import { GoChevronDown } from 'react-icons/go'
+import { IoChevronDown } from 'react-icons/io5'
+import { FiRefreshCcw } from 'react-icons/fi'
+import { LuTrash } from 'react-icons/lu'
+import InputHistory from './InputHistory'
 
 const Activity = () => {
   const ActivityTypeList = ['Community Service', 'Teaching', 'Cleaning']
+
+  const [inputValue, setInputValue] = useState<string>('')
+  const maxCharacterCount = 50
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value
+
+    // Check if the new value exceeds the character limit
+    if (newValue.length <= maxCharacterCount) {
+      setInputValue(newValue)
+    }
+  }
+
+  const [showHistory, setShowHistory] = useState(false)
+
   return (
     <div className="flex flex-col rounded-[20px] border border-[#E1E4E7] px-5 py-6">
       <div className="font-semibold text-base">Activity</div>
@@ -36,15 +57,17 @@ const Activity = () => {
           <Dropdown options={ActivityTypeList} />
         </div>
 
-        {/* position/leadership */}
+        <InputHistory
+          label="Position/Leadership description"
+          maxCharacterCount={50}
+        />
+        <InputHistory label="Organization name" maxCharacterCount={1000} />
+        <InputHistory label="Describe activity" maxCharacterCount={150} />
+
         <div>
-          <div className="flex flex-row justify-between items-center pb-2">
-            <div className="text-neutral-400 text-sm font-medium w-[157px]">
-              Position/Leadership description
-            </div>
-            <img src={Generate} className="cursor-pointer" />
+          <div className="text-neutral-400 text-sm font-medium">
+            Participation grade levels
           </div>
-          <input className="w-full  px-4 py-3 rounded-xl bg-[#f7f7f7]" />
         </div>
       </div>
     </div>
