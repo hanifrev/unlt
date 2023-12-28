@@ -4,16 +4,20 @@ import { IoChevronDown } from 'react-icons/io5'
 
 interface DropdownProps {
   options: string[]
+  selectedValue?: any
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ options }) => {
+const Dropdown: React.FC<DropdownProps> = ({ options, selectedValue }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option)
     setIsDropdownOpen(false)
+    selectedValue(option)
   }
+
+  console.log(selectedOption)
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen)

@@ -8,16 +8,20 @@ import { Generate, Star } from 'assets'
 interface CharacterCounterProps {
   label: string
   maxCharacterCount: number
+  selectedValue?: any
 }
 
 const InputHistory: React.FC<CharacterCounterProps> = ({
   label,
-  maxCharacterCount
+  maxCharacterCount,
+  selectedValue
 }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [showHistory, setShowHistory] = useState(false)
   const [history, setHistory] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
+
+  console.log(history)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value
@@ -32,6 +36,7 @@ const InputHistory: React.FC<CharacterCounterProps> = ({
     // Update history with the current input value when the image is clicked
     if (inputValue) {
       setHistory((prevHistory) => [inputValue, ...prevHistory])
+      selectedValue(inputValue)
       setInputValue('') // Optionally clear the input value after adding to history
       setShowHistory(true)
     }
