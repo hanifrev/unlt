@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { GoChevronDown } from 'react-icons/go'
 import { IoChevronDown } from 'react-icons/io5'
 
 interface DropdownProps {

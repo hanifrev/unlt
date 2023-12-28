@@ -4,12 +4,14 @@ import React, { useState } from 'react'
 import InputHistory from './InputHistory'
 import CheckboxGrade from './CheckboxGrade'
 import CheckboxTime from './CheckboxTiming'
+import axios from 'axios'
 
 interface BuilderProp {
-  builderActivity: any
+  builderActivity?: any
+  onDataPosted: () => void
 }
 
-const Activity: React.FC<BuilderProp> = ({ builderActivity }) => {
+const Activity: React.FC<BuilderProp> = ({ builderActivity, onDataPosted }) => {
   const [stateActivity, setStateActivity] = useState([
     {
       activity: '',
@@ -41,7 +43,7 @@ const Activity: React.FC<BuilderProp> = ({ builderActivity }) => {
       setStateActivity((prevValues: any) => [
         {
           ...prevValues[0],
-          timing: [value, ...prevValues[0].timing]
+          gradeLevel: [value, ...prevValues[0].timing]
         },
         ...prevValues.slice(1)
       ])
@@ -61,7 +63,7 @@ const Activity: React.FC<BuilderProp> = ({ builderActivity }) => {
       setStateActivity((prevValues: any) => [
         {
           ...prevValues[0],
-          gradeLevel: [value, ...prevValues[0].gradeLevel]
+          timing: [value, ...prevValues[0].gradeLevel]
         },
         ...prevValues.slice(1)
       ])
@@ -149,10 +151,46 @@ const Activity: React.FC<BuilderProp> = ({ builderActivity }) => {
     ])
   }
 
-  // generate content
-  const generate = () => {
-    const activityValue = stateActivity || ''
-    builderActivity(activityValue)
+  const generate = async () => {
+    try {
+      const activityValue = stateActivity || ''
+      builderActivity(activityValue && activityValue)
+
+      const postData = stateActivity.map((item) => ({
+        activity: item.activity || '',
+        type: item.type || '',
+        position: item.position || [],
+        organizationName: item.organizationName || [],
+        describe: item.describe || [],
+        gradeLevel: item.gradeLevel || [],
+        timing: item.timing || [],
+        hours: item.hours || '',
+        weeks: item.weeks || ''
+      }))
+
+      const response = await axios.post(
+        'https://658d0f157c48dce947386960.mockapi.io/unilite',
+        postData
+      )
+
+      console.log('POST request successful:', response.data)
+
+      setStateActivity([
+        {
+          activity: '',
+          type: '',
+          position: [],
+          organizationName: [],
+          describe: [],
+          gradeLevel: [],
+          timing: [],
+          hours: '',
+          weeks: ''
+        }
+      ])
+    } catch (error) {
+      console.error('Error making POST request:', error)
+    }
   }
 
   return (

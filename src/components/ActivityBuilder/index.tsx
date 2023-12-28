@@ -5,16 +5,20 @@ import ActivityList from 'components/ActivityList'
 
 const ActivityBuilder = () => {
   const [builderValues, setBuilderValues] = useState()
+  const [dataPosted, setDataPosted] = useState<any>()
 
   return (
     <div>
       <Header />
       <div className="flex flex-row">
         <div className="max-w-[368px] w-full">
-          <Builder builderActivity={setBuilderValues} />
+          <Builder
+            onDataPosted={setDataPosted}
+            builderActivity={setBuilderValues}
+          />
         </div>
-        <div className="bg-[#F8F9FC] w-full h-screen">
-          <ActivityList builderData={builderValues} />
+        <div className="bg-[#F8F9FC] w-full h-auto">
+          <ActivityList onDataPosted={dataPosted} builderData={builderValues} />
         </div>
       </div>
     </div>
