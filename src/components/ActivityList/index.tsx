@@ -32,10 +32,21 @@ const ActivityList: React.FC<ListProp> = ({ builderData, onDataPosted }) => {
       const getResponse = await axios.get(
         'https://658d0f157c48dce947386960.mockapi.io/unilite'
       )
-      console.log('GET request successful:', getResponse.data)
       setResponseData(getResponse.data)
     } catch (error) {
       console.error('Error making GET request:', error)
+    }
+  }
+
+  const deleteItem = async (itemId: number) => {
+    try {
+      const response = await axios.delete(
+        `https://658d0f157c48dce947386960.mockapi.io/unilite/${itemId}`
+      )
+      console.log('DELETE request successful:', response.data)
+      fetchData() // Refresh the data after deletion
+    } catch (error) {
+      console.error('Error making DELETE request:', error)
     }
   }
 
@@ -78,8 +89,8 @@ const ActivityList: React.FC<ListProp> = ({ builderData, onDataPosted }) => {
                     </span>
                     <span>{item[0].type}</span>
                   </div>
-                  <div className="text-base flex flex-row items-center gap-2 text-neutral-500">
-                    <FaRegTrashAlt />
+                  <div className="text-base flex flex-row items-center gap-2 text-neutral-500 cursor-pointer">
+                    <FaRegTrashAlt onClick={() => deleteItem(item.id)} />
                     <MdDragIndicator />
                   </div>
                 </div>
