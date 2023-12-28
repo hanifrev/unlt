@@ -5,7 +5,6 @@ import ActivityList from 'components/ActivityList'
 
 const ActivityBuilder = () => {
   const [builderValues, setBuilderValues] = useState()
-  console.log(builderValues)
 
   return (
     <div>
@@ -15,7 +14,7 @@ const ActivityBuilder = () => {
           <Builder builderActivity={setBuilderValues} />
         </div>
         <div className="bg-[#F8F9FC] w-full h-screen">
-          <ActivityList />
+          <ActivityList builderData={builderValues} />
         </div>
       </div>
     </div>

@@ -10,7 +10,6 @@ interface BuilderProp {
 const Builder: React.FC<BuilderProp> = ({ builderActivity }) => {
   const [tabs, setTabs] = useState()
   const handleTabsSelect = (value: any) => {
-    console.log(value)
     setTabs(value)
   }
 

@@ -73,12 +73,10 @@ const Activity: React.FC<BuilderProp> = ({ builderActivity }) => {
   // activity
   const handleActivityChange = (value: string) => {
     setStateActivity((prevState) => [
-      // Update the first object in the array
       {
         ...prevState[0],
         activity: value
       },
-      // Keep the rest of the objects unchanged
       ...prevState.slice(1)
     ])
   }
@@ -153,12 +151,7 @@ const Activity: React.FC<BuilderProp> = ({ builderActivity }) => {
 
   // generate content
   const generate = () => {
-    // Assuming you want to get the 'activity' field from the first item in stateActivity
     const activityValue = stateActivity || ''
-
-    // Update builderActivity prop with the current 'activity' value
-    // You might want to modify this logic based on your specific use case
-    // For example, concatenate the values, use a different field, etc.
     builderActivity(activityValue)
   }
 

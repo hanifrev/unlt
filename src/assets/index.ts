@@ -13,6 +13,8 @@ import ProfilePic from './ProfilePic.svg'
 import Upgrade from './Upgrade.svg'
 import Star from './Star.svg'
 import Generate from './Generate.svg'
+import SortHead from './SortHead.svg'
+import ExportDoc from './ExportDoc.svg'
 
 export {
   Logo,
@@ -29,5 +31,7 @@ export {
   ProfilePic,
   Upgrade,
   Star,
-  Generate
+  Generate,
+  SortHead,
+  ExportDoc
 }
