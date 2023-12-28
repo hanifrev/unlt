@@ -1,50 +1,15 @@
 import { Generate, Star } from 'assets'
 import Dropdown from 'components/Dropdown'
-import React, { ChangeEvent, useState } from 'react'
-import { FaHistory } from 'react-icons/fa'
-import { GoChevronDown } from 'react-icons/go'
-import { IoChevronDown } from 'react-icons/io5'
-import { FiRefreshCcw } from 'react-icons/fi'
-import { LuTrash } from 'react-icons/lu'
+import React, { useState } from 'react'
 import InputHistory from './InputHistory'
 import CheckboxGrade from './CheckboxGrade'
 import CheckboxTime from './CheckboxTiming'
 
-const Activity = () => {
-  const ActivityTypeList = ['Community Service', 'Teaching', 'Cleaning']
+interface BuilderProp {
+  builderActivity: any
+}
 
-  // Participation grade levels function
-  const [selectedValuesGrade, setSelectedValuesGrade] = useState<string[]>([])
-
-  const handleCheckboxChange = (value: string) => {
-    if (selectedValuesGrade.includes(value)) {
-      setSelectedValuesGrade((prevValues) =>
-        prevValues.filter((v) => v !== value)
-      )
-    } else {
-      setSelectedValuesGrade((prevValues) => [...prevValues, value])
-    }
-  }
-
-  console.log(selectedValuesGrade)
-
-  // Timing of participation function
-  const [selectedValuesTiming, setSelectedValuesTiming] = useState<string[]>([])
-
-  const handleCheckboxTimingChange = (value: string) => {
-    if (selectedValuesTiming.includes(value)) {
-      setSelectedValuesTiming((prevValues) =>
-        prevValues.filter((v) => v !== value)
-      )
-    } else {
-      setSelectedValuesTiming((prevValues) => [...prevValues, value])
-    }
-  }
-
-  console.log(selectedValuesTiming)
-
-  // state and function to store data from builder to the state
-
+const Activity: React.FC<BuilderProp> = ({ builderActivity }) => {
   const [stateActivity, setStateActivity] = useState([
     {
       activity: '',
@@ -61,13 +26,57 @@ const Activity = () => {
 
   console.log(stateActivity)
 
+  const ActivityTypeList = ['Community Service', 'Teaching', 'Cleaning']
+
+  // Participation grade levels function
+  const [selectedValuesGrade, setSelectedValuesGrade] = useState<string[]>([])
+
+  const handleCheckboxChange = (value: string) => {
+    if (selectedValuesGrade.includes(value)) {
+      setSelectedValuesGrade((prevValues) =>
+        prevValues.filter((v) => v !== value)
+      )
+    } else {
+      setSelectedValuesGrade((prevValues) => [...prevValues, value])
+      setStateActivity((prevValues: any) => [
+        {
+          ...prevValues[0],
+          timing: [value, ...prevValues[0].timing]
+        },
+        ...prevValues.slice(1)
+      ])
+    }
+  }
+
+  // Timing of participation function
+  const [selectedValuesTiming, setSelectedValuesTiming] = useState<string[]>([])
+
+  const handleCheckboxTimingChange = (value: string) => {
+    if (selectedValuesTiming.includes(value)) {
+      setSelectedValuesTiming((prevValues) =>
+        prevValues.filter((v) => v !== value)
+      )
+    } else {
+      setSelectedValuesTiming((prevValues) => [...prevValues, value])
+      setStateActivity((prevValues: any) => [
+        {
+          ...prevValues[0],
+          gradeLevel: [value, ...prevValues[0].gradeLevel]
+        },
+        ...prevValues.slice(1)
+      ])
+    }
+  }
+
+  // state and function to store data from builder to the state
+
   // activity
-  const handleActivityChange = (index: number, newValue: string) => {
+  const handleActivityChange = (value: string) => {
     setStateActivity((prevState) => [
       // Update the first object in the array
       {
         ...prevState[0],
-        activity: newValue
+        activity: value
       },
       // Keep the rest of the objects unchanged
       ...prevState.slice(1)
@@ -76,7 +85,6 @@ const Activity = () => {
 
   // type
   const handleTypeAct = (value: string) => {
-    console.log(value)
     setStateActivity((prevState) => [
       {
         ...prevState[0],
@@ -99,6 +107,61 @@ const Activity = () => {
     ])
   }
 
+  // organization name
+  const handleOrgName = (value: string) => {
+    setStateActivity((prevState: any) => [
+      {
+        ...prevState[0],
+        organizationName: [value, ...prevState[0].organizationName]
+      },
+      ...prevState.slice(1)
+    ])
+  }
+
+  //   describe activity
+  const handleDescAct = (value: string) => {
+    setStateActivity((prevState: any) => [
+      {
+        ...prevState[0],
+        describe: [value, ...prevState[0].describe]
+      },
+      ...prevState.slice(1)
+    ])
+  }
+
+  // hours spent
+  const handleHours = (value: string) => {
+    setStateActivity((prevState) => [
+      {
+        ...prevState[0],
+        hours: value
+      },
+      ...prevState.slice(1)
+    ])
+  }
+
+  // weeks spent
+  const hanldeWeeks = (value: string) => {
+    setStateActivity((prevState) => [
+      {
+        ...prevState[0],
+        weeks: value
+      },
+      ...prevState.slice(1)
+    ])
+  }
+
+  // generate content
+  const generate = () => {
+    // Assuming you want to get the 'activity' field from the first item in stateActivity
+    const activityValue = stateActivity || ''
+
+    // Update builderActivity prop with the current 'activity' value
+    // You might want to modify this logic based on your specific use case
+    // For example, concatenate the values, use a different field, etc.
+    builderActivity(activityValue)
+  }
+
   return (
     <div className="flex flex-col rounded-[20px] border border-[#E1E4E7] px-5 py-6">
       <div className="font-semibold text-base">Activity</div>
@@ -110,9 +173,12 @@ const Activity = () => {
         </div>
         <textarea
           className="min-h-[112px] p-4 rounded-xl bg-[#f7f7f7] text-sm"
-          onChange={(e) => handleActivityChange(0, e.target.value)}
+          onChange={(e) => handleActivityChange(e.target.value)}
         />
-        <button className="px-[14px] py-2 w-full flex flex-row justify-center bg-gradient-to-b from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 focus:bg-blue-700 cursor-pointer rounded-xl shadow">
+        <button
+          onClick={generate}
+          className="px-[14px] py-2 w-full flex flex-row justify-center bg-gradient-to-b from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 focus:bg-blue-700 cursor-pointer rounded-xl shadow"
+        >
           <img src={Star} />
           <span className="text-white font-medium text-sm">
             Generate content
@@ -139,8 +205,16 @@ const Activity = () => {
           maxCharacterCount={50}
           selectedValue={handlePosition}
         />
-        <InputHistory label="Organization name" maxCharacterCount={1000} />
-        <InputHistory label="Describe activity" maxCharacterCount={150} />
+        <InputHistory
+          label="Organization name"
+          maxCharacterCount={1000}
+          selectedValue={handleOrgName}
+        />
+        <InputHistory
+          label="Describe activity"
+          maxCharacterCount={150}
+          selectedValue={handleDescAct}
+        />
 
         <div>
           <div className="text-neutral-400 text-sm font-medium">
@@ -168,8 +242,7 @@ const Activity = () => {
           </div>
           <input
             className="w-full  px-4 py-3 rounded-xl bg-[#f7f7f7] font-medium text-sm break-all"
-            // value={inputValue}
-            // onChange={handleInputChange}
+            onChange={(e) => handleHours(e.target.value)}
           />
         </div>
 
@@ -179,8 +252,7 @@ const Activity = () => {
           </div>
           <input
             className="w-full  px-4 py-3 rounded-xl bg-[#f7f7f7] font-medium text-sm break-all"
-            // value={inputValue}
-            // onChange={handleInputChange}
+            onChange={(e) => hanldeWeeks(e.target.value)}
           />
         </div>
       </div>
